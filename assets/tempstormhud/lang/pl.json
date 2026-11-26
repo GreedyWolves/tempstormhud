@@ -1,0 +1,12 @@
+{
+	"hotkey-toggle": "Pokaż/ukryj licznik burzy temporalnej",
+	"storm-upcoming": "Burza temporalna ({0}) za <strong>{1}</strong>",
+	"storm-active": "Burza temporalna ({0}) trwa jeszcze <strong>{1}</strong>",
+	"rift-activity": "Aktywność wyrw: <strong>{0}</strong>, przez <strong>{1}</strong>",
+	"strength-light": "lekka",
+	"strength-medium": "średnia",
+	"strength-heavy": "ciężka",
+	"time-days": "{0} dnia",
+	"time-hours": "{0} h {1} min",
+	"time-moment": "chwilę"
+}
