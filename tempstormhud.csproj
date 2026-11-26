@@ -59,6 +59,8 @@
 
     <RemoveDir Directories="$(ModStagingDir)" />
     <Copy SourceFiles="$(MSBuildProjectDirectory)/modinfo.json" DestinationFolder="$(ModStagingDir)" />
+    <!-- The game loads ./modicon.png from the mod root when modinfo.json sets no iconPath. -->
+    <Copy SourceFiles="$(MSBuildProjectDirectory)/modicon.png" DestinationFolder="$(ModStagingDir)" Condition="Exists('$(MSBuildProjectDirectory)/modicon.png')" />
     <Copy SourceFiles="@(ModSourceFiles)" DestinationFolder="$(ModStagingDir)src/%(RecursiveDir)" />
     <Copy SourceFiles="@(ModAssetFiles)" DestinationFolder="$(ModStagingDir)assets/%(RecursiveDir)" />
 

@@ -1,4 +1,4 @@
-# Temporal Storm HUD
+# <img src="modicon.png" alt="" width="64" height="64" align="absmiddle"> Temporal Storm HUD
 
 A **Vintage Story 1.22.x** mod (tested on 1.22.7). Client-side only, so it also works on other people's servers.
 
@@ -14,6 +14,15 @@ Rift activity: calm, for 9 h 40 min
 - **Rift activity**: the current level (name taken from the game's translation) and how many in-game hours it will last.
 
 All times are in-game time.
+
+## Screenshots
+
+| | |
+|---|---|
+| **Before a storm** | |
+| ![HUD close-up: temporal storm in 3.2 days, low rift activity](docs/tempstormhud-scr01.jpg) | ![HUD in the top-left corner of the game screen before a storm](docs/tempstormhud-scr02.jpg) |
+| **During a storm** | |
+| ![HUD close-up: temporal storm still active for 5 h 30 min](docs/tempstormhud-scr03.jpg) | ![HUD in the top-left corner of the game screen during a storm](docs/tempstormhud-scr05.jpg) |
 
 ## Languages
 
