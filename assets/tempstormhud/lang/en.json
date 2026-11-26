@@ -1,0 +1,12 @@
+{
+	"hotkey-toggle": "Show/hide temporal storm HUD",
+	"storm-upcoming": "Temporal storm ({0}) in <strong>{1}</strong>",
+	"storm-active": "Temporal storm ({0}) still active for <strong>{1}</strong>",
+	"rift-activity": "Rift activity: <strong>{0}</strong>, for <strong>{1}</strong>",
+	"strength-light": "light",
+	"strength-medium": "medium",
+	"strength-heavy": "heavy",
+	"time-days": "{0} days",
+	"time-hours": "{0} h {1} min",
+	"time-moment": "a moment"
+}

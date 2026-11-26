@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <!--
-    Mod jest dystrybuowany jako zip ze źródłem .cs (gra kompiluje go sama przy starcie).
-    Ten projekt służy do:
-      1) kompilacji kontrolnej z bibliotekami gry (wyłapuje błędy typów/nazw przed testem w grze),
-      2) spakowania zipa do bin/,
-      3) opcjonalnie: wrzucenia zipa do VintagestoryData/Mods (dotnet build -p:Deploy=true).
+    The mod is distributed as a zip with the .cs source and assets (the game compiles it on startup).
+    This project is used to:
+      1) compile-check against the game's libraries (catches type/name errors before testing in game),
+      2) package the zip into bin/,
+      3) optionally copy the zip into VintagestoryData/Mods (dotnet build -p:Deploy=true).
 
-    Wymaga zmiennej środowiskowej VINTAGE_STORY = folder instalacji gry
-    (domyślnie %AppData%\Vintagestory). Biblioteki gry NIE trafiają do repozytorium.
+    Requires the VINTAGE_STORY environment variable = game installation folder
+    (by default %AppData%\Vintagestory). Game libraries are NOT committed to the repository.
   -->
 
   <PropertyGroup>
@@ -25,7 +25,7 @@
     <ModZipPath>$(ModZipDir)/$(ModId)_$(ModVersion).zip</ModZipPath>
     <ModStagingDir>$(BaseIntermediateOutputPath)modzip/</ModStagingDir>
 
-    <!-- Folder Mods gry; nadpisz: dotnet build -p:ModsDir=... -->
+    <!-- The game's Mods folder; override with: dotnet build -p:ModsDir=... -->
     <ModsDir Condition="'$(ModsDir)' == ''">$(APPDATA)/VintagestoryData/Mods</ModsDir>
     <Deploy Condition="'$(Deploy)' == ''">false</Deploy>
   </PropertyGroup>
@@ -35,7 +35,7 @@
       <HintPath>$(VINTAGE_STORY)/VintagestoryAPI.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <!-- Na wypadek, gdyby kompilator zażądał typów Cairo (CairoFont). -->
+    <!-- In case the compiler requires Cairo types (CairoFont). -->
     <Reference Include="cairo-sharp" Condition="Exists('$(VINTAGE_STORY)/Lib/cairo-sharp.dll')">
       <HintPath>$(VINTAGE_STORY)/Lib/cairo-sharp.dll</HintPath>
       <Private>false</Private>
@@ -44,36 +44,38 @@
 
   <Target Name="CheckVintageStoryPath" BeforeTargets="ResolveAssemblyReferences">
     <Error Condition="'$(VINTAGE_STORY)' == ''"
-           Text="Brak zmiennej środowiskowej VINTAGE_STORY (folder instalacji gry). Ustaw ją i uruchom ponownie terminal/aplikację." />
+           Text="The VINTAGE_STORY environment variable (game installation folder) is not set. Set it and restart the terminal/application." />
     <Error Condition="!Exists('$(VINTAGE_STORY)/VintagestoryAPI.dll')"
-           Text="Nie znaleziono $(VINTAGE_STORY)/VintagestoryAPI.dll - sprawdź zmienną VINTAGE_STORY." />
+           Text="$(VINTAGE_STORY)/VintagestoryAPI.dll not found - check the VINTAGE_STORY variable." />
   </Target>
 
   <Target Name="PackageModZip" AfterTargets="Build">
-    <Error Condition="'$(ModVersion)' == ''" Text="Nie udało się odczytać wersji z modinfo.json." />
+    <Error Condition="'$(ModVersion)' == ''" Text="Could not read the version from modinfo.json." />
 
     <ItemGroup>
       <ModSourceFiles Include="$(MSBuildProjectDirectory)/src/**/*.cs" />
+      <ModAssetFiles Include="$(MSBuildProjectDirectory)/assets/**/*" />
     </ItemGroup>
 
     <RemoveDir Directories="$(ModStagingDir)" />
     <Copy SourceFiles="$(MSBuildProjectDirectory)/modinfo.json" DestinationFolder="$(ModStagingDir)" />
     <Copy SourceFiles="@(ModSourceFiles)" DestinationFolder="$(ModStagingDir)src/%(RecursiveDir)" />
+    <Copy SourceFiles="@(ModAssetFiles)" DestinationFolder="$(ModStagingDir)assets/%(RecursiveDir)" />
 
     <MakeDir Directories="$(ModZipDir)" />
     <ZipDirectory SourceDirectory="$(ModStagingDir)" DestinationFile="$(ModZipPath)" Overwrite="true" />
-    <Message Importance="high" Text="Spakowano: $(ModZipPath)" />
+    <Message Importance="high" Text="Packaged: $(ModZipPath)" />
   </Target>
 
-  <!-- Usuwa wcześniejsze wersje moda z Mods, żeby gra nie wczytała dwóch naraz. -->
+  <!-- Removes earlier versions of the mod from Mods so the game doesn't load two at once. -->
   <Target Name="DeployModZip" AfterTargets="PackageModZip" Condition="'$(Deploy)' == 'true'">
-    <Error Condition="!Exists('$(ModsDir)')" Text="Nie znaleziono folderu Mods: $(ModsDir)" />
+    <Error Condition="!Exists('$(ModsDir)')" Text="Mods folder not found: $(ModsDir)" />
     <ItemGroup>
       <OldModZips Include="$(ModsDir)/$(ModId)_*.zip" />
     </ItemGroup>
     <Delete Files="@(OldModZips)" />
     <Copy SourceFiles="$(ModZipPath)" DestinationFolder="$(ModsDir)" />
-    <Message Importance="high" Text="Wgrano do: $(ModsDir)" />
+    <Message Importance="high" Text="Deployed to: $(ModsDir)" />
   </Target>
 
 </Project>

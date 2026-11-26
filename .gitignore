@@ -1,18 +1,18 @@
-# Wyniki budowania
+# Build output
 bin/
 obj/
 
-# Spakowane mody (publikowane jako release, nie w repo)
+# Packaged mods (published as releases, not in the repo)
 *.zip
 
-# Biblioteki gry - nigdy nie commitować
+# Game libraries - never commit
 *.dll
 *.pdb
 
-# Instrukcje dla Claude (lokalne, nie w repo)
+# Instructions for Claude (local, not in the repo)
 CLAUDE.md
 
-# IDE / edytory
+# IDEs / editors
 .vs/
 .vscode/
 .idea/

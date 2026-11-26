@@ -1,48 +1,52 @@
 # Temporal Storm HUD
 
-Mod do **Vintage Story 1.22.x** (testowany na 1.22.7), działający tylko po stronie klienta – także na cudzych serwerach.
+A **Vintage Story 1.22.x** mod (tested on 1.22.7). Client-side only, so it also works on other people's servers.
 
-Wyświetla w lewym górnym rogu ekranu stały HUD:
+Shows a persistent HUD in the top-left corner of the screen:
 
 ```
-Burza temporalna (lekka) za 18,0 dnia
+Temporal storm (light) in 18.0 days
 
-Aktywność wyrw: spokojne, przez 9 h 40 min
+Rift activity: calm, for 9 h 40 min
 ```
 
-- **Burza temporalna** – siła i czas do następnej burzy (od doby w górę w dniach z jednym miejscem po przecinku, poniżej w godzinach i minutach gry); w trakcie burzy – czas do jej końca.
-- **Aktywność wyrw** – aktualny poziom (nazwa z tłumaczenia gry) i ile godzin gry jeszcze potrwa.
+- **Temporal storm**: strength and time until the next storm (one decimal place in days from one day up, game hours and minutes below that); during a storm, the time until it ends.
+- **Rift activity**: the current level (name taken from the game's translation) and how many in-game hours it will last.
 
-Czas jest liczony w czasie gry. Teksty HUD-u są po polsku.
+All times are in-game time.
 
-## Instalacja
+## Languages
 
-Pobierz `tempstormhud_X.Y.Z.zip` z zakładki Releases i wrzuć **bez rozpakowywania** do folderu `VintagestoryData/Mods`. Usuń wcześniejszą wersję moda, jeśli była.
+English (default) and Polish. The HUD follows the game's language setting; for other languages it falls back to English. Translations live in `assets/tempstormhud/lang/` – contributions are welcome.
 
-## Sterowanie
+## Installation
 
-`Ctrl+Shift+T` – pokaż/ukryj HUD (zmiana w ustawieniach sterowania gry).
+Download `tempstormhud_X.Y.Z.zip` from Releases and put it **without unpacking** into the `VintagestoryData/Mods` folder. Remove the previous version of the mod, if any.
 
-## Ograniczenia
+## Controls
 
-- Po `/nexttempstorm now` serwer nie wysyła klientom aktualizacji, więc licznik burzy pokazuje starą wartość do chwili, gdy burza się zacznie.
-- Linia aktywności wyrw pojawia się dopiero, gdy serwer prześle dane (przy wejściu do świata).
+`Ctrl+Shift+T` – show/hide the HUD (can be changed in the game's control settings).
 
-## Budowanie
+## Limitations
 
-Wymagania: .NET 10 SDK i zmienna środowiskowa `VINTAGE_STORY` wskazująca folder instalacji gry:
+- After `/nexttempstorm now` the server does not send an update to clients, so the storm countdown shows the old value until the storm starts.
+- The rift activity line appears only once the server sends its data (on joining the world).
+
+## Building
+
+Requirements: .NET 10 SDK and the `VINTAGE_STORY` environment variable pointing to the game's installation folder:
 
 ```powershell
 [Environment]::SetEnvironmentVariable("VINTAGE_STORY", "$Env:AppData\Vintagestory", "User")
 ```
 
 ```powershell
-dotnet build                  # kompilacja kontrolna + zip w bin/release/
-dotnet build -p:Deploy=true   # dodatkowo podmienia moda w %AppData%\VintagestoryData\Mods
+dotnet build                  # compile check + zip in bin/release/
+dotnet build -p:Deploy=true   # also replaces the mod in %AppData%\VintagestoryData\Mods
 ```
 
-Mod jest dystrybuowany jako zip ze źródłem `.cs` – gra kompiluje go sama przy starcie. Projekt `.csproj` służy do sprawdzenia kodu z bibliotekami gry i do pakowania.
+The mod is distributed as a zip containing the `.cs` source and assets – the game compiles it itself on startup. The `.csproj` project is used to check the code against the game's libraries and to package the zip.
 
-## Licencja
+## License
 
-MIT – zobacz [LICENSE](LICENSE).
+MIT – see [LICENSE](LICENSE).
