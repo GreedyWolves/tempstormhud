@@ -401,8 +401,8 @@ namespace TempStormHud
             ElementBounds positionBounds = ElementBounds.Fixed(controlX, y, controlWidth, rowHeight);
 
             y += rowHeight + rowGap + 10;
+            // Left side, so the expanded position list doesn't cover it.
             ElementBounds closeBounds = ElementBounds.Fixed(0, y, 0, 0)
-                .WithAlignment(EnumDialogArea.RightFixed)
                 .WithFixedPadding(10, 2);
 
             ElementBounds bgBounds = ElementBounds.Fill.WithFixedPadding(GuiStyle.ElementToDialogPadding);
