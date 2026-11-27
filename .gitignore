@@ -2,6 +2,9 @@
 bin/
 obj/
 
+# Developing notes
+notes/
+
 # Packaged mods (published as releases, not in the repo)
 *.zip
 
