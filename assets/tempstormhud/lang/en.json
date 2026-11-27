@@ -13,7 +13,7 @@
 	"position-rightbottom": "Bottom right",
 	"storm-upcoming": "Temporal storm ({0}) in <strong>{1}</strong>",
 	"storm-active": "Temporal storm ({0}) still active for <strong>{1}</strong>",
-	"rift-activity": "Rift activity: <strong>{0}</strong>, for <strong>{1}</strong>",
+	"rift-activity": "Rift activity: <strong>{0},</strong> for <strong>{1}</strong>",
 	"strength-light": "light",
 	"strength-medium": "medium",
 	"strength-heavy": "heavy",

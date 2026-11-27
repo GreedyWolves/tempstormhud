@@ -13,7 +13,7 @@
 	"position-rightbottom": "Prawy dolny róg",
 	"storm-upcoming": "Burza temporalna ({0}) za <strong>{1}</strong>",
 	"storm-active": "Burza temporalna ({0}) trwa jeszcze <strong>{1}</strong>",
-	"rift-activity": "Aktywność wyrw: <strong>{0}</strong>, przez <strong>{1}</strong>",
+	"rift-activity": "Aktywność wyrw: <strong>{0},</strong> przez <strong>{1}</strong>",
 	"strength-light": "lekka",
 	"strength-medium": "średnia",
 	"strength-heavy": "ciężka",
