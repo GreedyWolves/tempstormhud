@@ -11,6 +11,8 @@
 	"position-rightmiddle": "Middle right",
 	"position-leftbottom": "Bottom left",
 	"position-rightbottom": "Bottom right",
+	"position-custom": "Custom",
+	"settings-drag-hint": "Drag the HUD with the mouse to move it.",
 	"storm-upcoming": "Temporal storm ({0}) in <strong>{1}</strong>",
 	"storm-active": "Temporal storm ({0}) still active for <strong>{1}</strong>",
 	"rift-activity": "Rift activity: <strong>{0},</strong> for <strong>{1}</strong>",

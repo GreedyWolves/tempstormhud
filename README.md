@@ -43,6 +43,8 @@ The settings window has:
 - **Show HUD** – shows or hides the HUD.
 - **Position** – top left, top center, top right, middle left, middle right, bottom left or bottom right.
 
+While the settings window is open, you can also drag the HUD anywhere with the mouse; the position list then shows **Custom**. A dragged HUD keeps its distance from the nearest screen edge, so it stays in place when the window is resized. Choosing a position from the list moves it back to that edge.
+
 Changes apply immediately and are saved in `VintagestoryData/ModConfig/tempstormhud.json`, so there is no need to edit the file by hand. If the file can't be read, the mod uses the default settings, logs a warning and leaves the file unchanged until a setting is changed in the window.
 
 ## Limitations
