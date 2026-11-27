@@ -147,6 +147,7 @@ namespace TempStormHud
             }
 
             if (!hud.IsOpened()) hud.TryOpen();
+            hud.CheckGuiScale();
             if (text != lastText)
             {
                 hud.SetText(text);
@@ -273,6 +274,7 @@ namespace TempStormHud
 
         int lineCount;
         double textWidth;
+        float composedScale;
         string text = "Temporal Storm HUD";
         EnumDialogArea area;
 
@@ -287,6 +289,14 @@ namespace TempStormHud
             if (newArea == area) return;
             area = newArea;
             ComposeFor(text, lineCount, textWidth);
+        }
+
+        // Text width doesn't scale exactly with the GUI scale (e.g. at a smaller scale
+        // the text takes relatively more room and wrapped). The API has no event for
+        // scale changes, so this is called on every tick and re-measures when it changed.
+        public void CheckGuiScale()
+        {
+            if (RuntimeEnv.GUIScale != composedScale) ComposeFor(text, lineCount, MeasureWidth(text));
         }
 
         // Width (in GUI units) the text needs without wrapping. Lays out each line
@@ -365,6 +375,7 @@ namespace TempStormHud
             text = newText;
             lineCount = lines;
             textWidth = width;
+            composedScale = RuntimeEnv.GUIScale;
             SingleComposer?.Dispose();
 
             ElementBounds textBounds = ElementBounds.Fixed(0, 0, width, 20 * lines);
