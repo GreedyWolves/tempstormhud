@@ -263,24 +263,63 @@ namespace TempStormHud
     public class HudTempStorm : HudElement
     {
         const double Margin = 10;
+        // Extra width so rounding never makes the text wrap.
+        const double WidthReserve = 4;
+        // The box narrows only when the text gets this much shorter, so it doesn't
+        // twitch (e.g. at the right edge) every time a digit of the countdown changes.
+        const double ShrinkThreshold = 30;
 
         public override string ToggleKeyCombinationCode => null;
 
         int lineCount;
+        double textWidth;
         string text = "Temporal Storm HUD";
         EnumDialogArea area;
 
         public HudTempStorm(ICoreClientAPI capi, EnumDialogArea area) : base(capi)
         {
             this.area = area;
-            ComposeFor(text, 1);
+            ComposeFor(text, 1, MeasureWidth(text));
         }
 
         public void SetPosition(EnumDialogArea newArea)
         {
             if (newArea == area) return;
             area = newArea;
-            ComposeFor(text, lineCount);
+            ComposeFor(text, lineCount, textWidth);
+        }
+
+        // Width (in GUI units) the text needs without wrapping. Lays out each line
+        // with the game's own richtext components, the same way GuiElementRichtext does
+        // (CalcHeightAndPositions), but in a practically unlimited width.
+        double MeasureWidth(string vtml)
+        {
+            CairoFont font = CairoFont.WhiteSmallText();
+            TextFlowPath[] flowPath = { new TextFlowPath(100000) };
+            double maxX = 0;
+
+            foreach (string line in vtml.Split("<br>"))
+            {
+                if (line.Length == 0) continue;
+
+                RichTextComponentBase[] comps = VtmlUtil.Richtextify(capi, line, font);
+                double posX = 0;
+                foreach (RichTextComponentBase comp in comps)
+                {
+                    comp.CalcBounds(flowPath, 0, posX, 0, out double nextPosX);
+                    if (comp.Float == EnumFloat.Inline) posX = nextPosX;
+
+                    if (comp.BoundsPerLine != null)
+                    {
+                        foreach (LineRectangled b in comp.BoundsPerLine) maxX = Math.Max(maxX, b.X + b.Width);
+                    }
+                    comp.Dispose();
+                }
+            }
+
+            // Component bounds are in screen pixels; ElementBounds.Fixed takes GUI units.
+            double scale = RuntimeEnv.GUIScale > 0 ? RuntimeEnv.GUIScale : 1;
+            return Math.Ceiling(maxX / scale) + WidthReserve;
         }
 
         // The offset is added after alignment (ElementBounds.calcMarginFromAlignment),
@@ -319,15 +358,16 @@ namespace TempStormHud
             }
         }
 
-        // The background only fits the text when composing,
-        // so the HUD is rebuilt whenever the number of lines (or the position) changes.
-        void ComposeFor(string newText, int lines)
+        // The background only fits the text when composing, so the HUD is rebuilt
+        // whenever the number of lines, the needed width or the position changes.
+        void ComposeFor(string newText, int lines, double width)
         {
             text = newText;
             lineCount = lines;
+            textWidth = width;
             SingleComposer?.Dispose();
 
-            ElementBounds textBounds = ElementBounds.Fixed(0, 0, 380, 20 * lines);
+            ElementBounds textBounds = ElementBounds.Fixed(0, 0, width, 20 * lines);
 
             ElementBounds bgBounds = ElementBounds.Fill.WithFixedPadding(8);
             bgBounds.BothSizing = ElementSizing.FitToChildren;
@@ -353,7 +393,10 @@ namespace TempStormHud
         public void SetText(string newText)
         {
             int lines = newText.Split("<br>").Length;
-            if (lines != lineCount) ComposeFor(newText, lines);
+            double width = MeasureWidth(newText);
+            bool resize = width > textWidth || width < textWidth - ShrinkThreshold;
+
+            if (lines != lineCount || resize) ComposeFor(newText, lines, width);
             else
             {
                 text = newText;
