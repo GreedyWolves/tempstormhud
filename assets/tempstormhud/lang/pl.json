@@ -11,6 +11,8 @@
 	"position-rightmiddle": "Środek prawej krawędzi",
 	"position-leftbottom": "Lewy dolny róg",
 	"position-rightbottom": "Prawy dolny róg",
+	"position-custom": "Własne",
+	"settings-drag-hint": "Przeciągnij HUD myszą, żeby go przesunąć.",
 	"storm-upcoming": "Burza temporalna ({0}) za <strong>{1}</strong>",
 	"storm-active": "Burza temporalna ({0}) trwa jeszcze <strong>{1}</strong>",
 	"rift-activity": "Aktywność wyrw: <strong>{0},</strong> przez <strong>{1}</strong>",
