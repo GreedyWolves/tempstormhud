@@ -2,7 +2,7 @@
 
 A **Vintage Story 1.22.x** mod (tested on 1.22.7). Client-side only, so it also works on other people's servers.
 
-Shows a persistent HUD in the top-left corner of the screen:
+Shows a persistent HUD on screen (top-left corner by default, see [Settings](#settings)):
 
 ```
 Temporal storm (light) in 18.0 days
@@ -34,7 +34,16 @@ Download `tempstormhud_X.Y.Z.zip` from Releases and put it **without unpacking**
 
 ## Controls
 
-`Ctrl+Shift+T` – show/hide the HUD (can be changed in the game's control settings).
+`Ctrl+Shift+T` – open/close the settings window (can be changed in the game's control settings).
+
+## Settings
+
+The settings window has:
+
+- **Show HUD** – shows or hides the HUD.
+- **Position** – top left, top center, top right, middle left, middle right, bottom left or bottom right.
+
+Changes apply immediately and are saved in `VintagestoryData/ModConfig/tempstormhud.json`, so there is no need to edit the file by hand. If the file can't be read, the mod uses the default settings, logs a warning and leaves the file unchanged until a setting is changed in the window.
 
 ## Limitations
 
