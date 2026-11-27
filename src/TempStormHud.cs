@@ -331,6 +331,7 @@ namespace TempStormHud
         // Placement: anchored to a screen area, shifted by an offset in GUI units.
         EnumDialogArea area;
         double offsetX, offsetY;
+        bool customPosition;
 
         // Dragging. Allowed only while CanDrag() is true (the settings window is open:
         // the mouse cursor is free then, and nothing gets moved by accident in normal play).
@@ -352,8 +353,20 @@ namespace TempStormHud
         void SetPlacementFields(EnumDialogArea newArea, double? offX, double? offY)
         {
             area = newArea;
+            customPosition = offX.HasValue && offY.HasValue;
             offsetX = offX ?? OffsetX(newArea);
             offsetY = offY ?? OffsetY(newArea);
+        }
+
+        // The vanilla coordinates box (HudElementCoordinates) places itself below the first
+        // opened GUI aligned exactly RightTop (IGuiAPI.GetDialogBoundsInArea), wherever it is.
+        // A dragged HUD anchored top-right uses RightFixed instead: the same position
+        // (Y comes from the offset alone), but the coordinates box no longer follows it.
+        // The "Top right" preset keeps RightTop, so with the minimap off the coordinates
+        // box stacks below the HUD instead of overlapping it.
+        static EnumDialogArea LayoutAlignment(EnumDialogArea anchor, bool custom)
+        {
+            return custom && anchor == EnumDialogArea.RightTop ? EnumDialogArea.RightFixed : anchor;
         }
 
         public void SetPlacement(EnumDialogArea newArea, double? offX, double? offY)
@@ -458,7 +471,7 @@ namespace TempStormHud
             EnumDialogArea anchor = Anchors[row * 3 + col];
 
             // Where the game puts the HUD for this anchor with no offset.
-            b.Alignment = anchor;
+            b.Alignment = LayoutAlignment(anchor, true);
             b.fixedX = 0;
             b.fixedY = 0;
             b.fixedOffsetX = 0;
@@ -592,7 +605,7 @@ namespace TempStormHud
             bgBounds.WithChildren(textBounds);
 
             ElementBounds dialogBounds = ElementStdBounds.AutosizedMainDialog
-                .WithAlignment(area)
+                .WithAlignment(LayoutAlignment(area, customPosition))
                 .WithFixedAlignmentOffset(offsetX, offsetY);
 
             double[] bgColor = (double[])GuiStyle.DialogDefaultBgColor.Clone();
